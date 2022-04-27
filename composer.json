@@ -47,6 +47,7 @@
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "friendsofphp/php-cs-fixer": "^3.8",
         "phpstan/phpstan": "^1.6",
         "symfony/debug-bundle": "5.4.*",
