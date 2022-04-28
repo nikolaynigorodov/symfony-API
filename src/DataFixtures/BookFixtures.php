@@ -26,6 +26,18 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             ->setImage('https://images.manning.com/264/352/resize/book/b/bc57fb7-b239-4bf5-bbf2-886be8936951/Tuominen-RxJava-HI.png');
 
         $manager->persist($book);
+
+        $book2 = (new Book())
+            ->setTitle('Book2')
+            ->setPublicationDate(new DateTime('2019-04-01'))
+            ->setMeap(false)
+            ->setAuthors(['Timo Tuominen'])
+            ->setSlug('rxjava-for-android-developers')
+            ->setCategories(new ArrayCollection([$androidCategory]))
+            ->setImage('https://images.manning.com/264/352/resize/book/b/bc57fb7-b239-4bf5-bbf2-886be8936951/Tuominen-RxJava-HI.png');
+
+        $manager->persist($book2);
+
         $manager->flush();
     }
 
