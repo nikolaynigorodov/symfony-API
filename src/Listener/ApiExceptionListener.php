@@ -3,6 +3,7 @@
 namespace App\Listener;
 
 use App\Model\ErrorResponse;
+use App\Service\ExceptionHandler\ExceptionMapping;
 use App\Service\ExceptionHandler\ExceptionMappingResolve;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,26 +17,31 @@ class ApiExceptionListener
     public function __construct(
         private ExceptionMappingResolve $exceptionMappingResolve,
         private LoggerInterface $logger,
-        private SerializerInterface $serializer) {
+        private SerializerInterface $serializer,
+        private bool $isDebug)
+    {
     }
 
     public function __invoke(ExceptionEvent $event): void
     {
         $throwable = $event->getThrowable();
         $mapping = $this->exceptionMappingResolve->resolve(get_class($throwable));
+        if (null === $mapping) {
+            $mapping = ExceptionMapping::fromCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
         if($mapping->getCode() >= Response::HTTP_INTERNAL_SERVER_ERROR || $mapping->isLoggable()) {
-            $this->logger->error([$throwable->getMessage(),
+            $this->logger->error($throwable->getMessage(), [
                 'trace' => $throwable->getTraceAsString(),
-                'previous' => null !== $throwable->getPrevious() ? $throwable->getPrevious()->getMessage() : ''
+                'previous' => null !== $throwable->getPrevious() ? $throwable->getPrevious()->getMessage() : '',
             ]);
         }
 
         $message = $mapping->isHidden() ? Response::$statusTexts[$mapping->getCode()] : $throwable->getMessage();
-        $data = $this->serializer->serialize(new ErrorResponse($message), JsonEncoder::FORMAT);
+        $details = $this->isDebug ? ['trace' => $throwable->getTraceAsString()] : null;
+//        $details = null;
+        $data = $this->serializer->serialize(new ErrorResponse($message, $details), JsonEncoder::FORMAT);
 
-        $response = new JsonResponse($data, $mapping->getCode(), [], false);
-
-        $event->setResponse($response);
+        $event->setResponse(new JsonResponse($data, $mapping->getCode(), [], false));
     }
 }
