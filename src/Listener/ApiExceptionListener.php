@@ -30,7 +30,7 @@ class ApiExceptionListener
             $mapping = ExceptionMapping::fromCode(Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        if($mapping->getCode() >= Response::HTTP_INTERNAL_SERVER_ERROR || $mapping->isLoggable()) {
+        if ($mapping->getCode() >= Response::HTTP_INTERNAL_SERVER_ERROR || $mapping->isLoggable()) {
             $this->logger->error($throwable->getMessage(), [
                 'trace' => $throwable->getTraceAsString(),
                 'previous' => null !== $throwable->getPrevious() ? $throwable->getPrevious()->getMessage() : '',

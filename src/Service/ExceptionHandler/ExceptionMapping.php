@@ -8,7 +8,7 @@ class ExceptionMapping
     {
     }
 
-    public static function fromCode(int $code):  self
+    public static function fromCode(int $code): self
     {
         return new self($code, true, false);
     }

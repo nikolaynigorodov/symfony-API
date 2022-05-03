@@ -14,8 +14,8 @@ class ExceptionMappingResolve
     public function __construct(array $mappings)
     {
         foreach ($mappings as $class => $mapping) {
-            if(empty($mapping['code'])) {
-                throw new InvalidArgumentException('code is mandatory for class ' . $class);
+            if (empty($mapping['code'])) {
+                throw new InvalidArgumentException('code is mandatory for class '.$class);
             }
 
             $this->addMapping($class, $mapping['code'], $mapping['hidden'] ?? false, $mapping['loggable'] ?? false);
@@ -27,7 +27,7 @@ class ExceptionMappingResolve
         $foundMapping = null;
 
         foreach ($this->mappings as $class => $mapping) {
-            if($throwableClass === $class || is_subclass_of($throwableClass, $class)) {
+            if ($throwableClass === $class || is_subclass_of($throwableClass, $class)) {
                 $foundMapping = $mapping;
                 break;
             }

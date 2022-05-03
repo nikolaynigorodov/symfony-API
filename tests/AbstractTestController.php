@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class AbstractTestController extends WebTestCase
 {
-    use JsonAssertions; //composer require --dev helmich/phpunit-json-assert
+    use JsonAssertions; // composer require --dev helmich/phpunit-json-assert
 
     protected KernelBrowser $client;
 
