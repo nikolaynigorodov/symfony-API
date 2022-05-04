@@ -7,7 +7,7 @@ use Helmich\JsonAssert\JsonAssertions;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class AbstractTestController extends WebTestCase
+abstract class AbstractTestController extends WebTestCase
 {
     use JsonAssertions; // composer require --dev helmich/phpunit-json-assert
 

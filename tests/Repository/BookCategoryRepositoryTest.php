@@ -23,7 +23,7 @@ class BookCategoryRepositoryTest extends AbstractRepositoryTest
         $android = (new BookCategory())->setTitle('Android')->setSlug('android');
         $computer = (new BookCategory())->setTitle('Computer')->setSlug('computer');
 
-        foreach ([$devices, $android, $computer] as $category) {
+        foreach ([$android, $devices, $computer] as $category) {
             $this->em->persist($category);
         }
         $this->em->flush();
@@ -33,6 +33,6 @@ class BookCategoryRepositoryTest extends AbstractRepositoryTest
             $this->bookCategoryRepository->findAllSortedByTitle(),
         );
 
-        $this->assertEquals(['Android', 'Devices', 'Computer'], $titles);
+        $this->assertEquals(['Android', 'Computer', 'Devices'], $titles);
     }
 }

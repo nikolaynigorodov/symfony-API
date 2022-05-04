@@ -9,7 +9,7 @@ class ExceptionMappingResolve
     /**
      * @var ExceptionMapping[]
      */
-    private array $mappings;
+    private array $mappings = [];
 
     public function __construct(array $mappings)
     {
@@ -18,7 +18,7 @@ class ExceptionMappingResolve
                 throw new InvalidArgumentException('code is mandatory for class '.$class);
             }
 
-            $this->addMapping($class, $mapping['code'], $mapping['hidden'] ?? false, $mapping['loggable'] ?? false);
+            $this->addMapping($class, $mapping['code'], $mapping['hidden'] ?? false, $mapping['loggable'] ?? true);
         }
     }
 
