@@ -2,32 +2,32 @@
 
 namespace App\Tests\Service\ExceptionHandler;
 
-use App\Service\ExceptionHandler\ExceptionMappingResolve;
+use App\Service\ExceptionHandler\ExceptionMappingResolver;
 use App\Tests\AbstractTestCase;
 use InvalidArgumentException;
 use LogicException;
 use PHPUnit\Framework\TestCase;
 
-class ExceptionMappingResolveTest extends AbstractTestCase
+class ExceptionMappingResolverTest extends AbstractTestCase
 {
 
     public function testThrowsExceptionOnEmptyCode()
     {
         $this->expectException(InvalidArgumentException::class);
 
-        new ExceptionMappingResolve(['someClass' => ['hidden' => true]]);
+        new ExceptionMappingResolver(['someClass' => ['hidden' => true]]);
     }
 
     public function testResolvesToNullWhenNotFound(): void
     {
-        $resolver = new ExceptionMappingResolve([]);
+        $resolver = new ExceptionMappingResolver([]);
 
         $this->assertNull($resolver->resolve(InvalidArgumentException::class));
     }
 
     public function testResolvesClassItSelf(): void
     {
-        $resolver = new ExceptionMappingResolve([InvalidArgumentException::class => ['code' => 400]]);
+        $resolver = new ExceptionMappingResolver([InvalidArgumentException::class => ['code' => 400]]);
         $mapping = $resolver->resolve(InvalidArgumentException::class);
 
         $this->assertEquals(400, $mapping->getCode());
@@ -37,7 +37,7 @@ class ExceptionMappingResolveTest extends AbstractTestCase
 
     public function testResolvesSubClass()
     {
-        $resolver = new ExceptionMappingResolve([LogicException::class => ['code' => 500]]);
+        $resolver = new ExceptionMappingResolver([LogicException::class => ['code' => 500]]);
         $mapping = $resolver->resolve(InvalidArgumentException::class);
 
         $this->assertEquals(500, $mapping->getCode());
@@ -45,7 +45,7 @@ class ExceptionMappingResolveTest extends AbstractTestCase
 
     public function testResolvesHidden()
     {
-        $resolver = new ExceptionMappingResolve([LogicException::class => ['code' => 500, 'hidden' => false]]);
+        $resolver = new ExceptionMappingResolver([LogicException::class => ['code' => 500, 'hidden' => false]]);
         $mapping = $resolver->resolve(LogicException::class);
 
         $this->assertFalse($mapping->isHidden());
@@ -53,7 +53,7 @@ class ExceptionMappingResolveTest extends AbstractTestCase
 
     public function testResolvesLoggable()
     {
-        $resolver = new ExceptionMappingResolve([LogicException::class => ['code' => 500, 'loggable' => true]]);
+        $resolver = new ExceptionMappingResolver([LogicException::class => ['code' => 500, 'loggable' => true]]);
         $mapping = $resolver->resolve(LogicException::class);
 
         $this->assertTrue($mapping->isLoggable());

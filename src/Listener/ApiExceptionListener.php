@@ -4,7 +4,7 @@ namespace App\Listener;
 
 use App\Model\ErrorResponse;
 use App\Service\ExceptionHandler\ExceptionMapping;
-use App\Service\ExceptionHandler\ExceptionMappingResolve;
+use App\Service\ExceptionHandler\ExceptionMappingResolver;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 class ApiExceptionListener
 {
     public function __construct(
-        private ExceptionMappingResolve $exceptionMappingResolve,
+        private ExceptionMappingResolver $exceptionMappingResolve,
         private LoggerInterface $logger,
         private SerializerInterface $serializer,
         private bool $isDebug)
