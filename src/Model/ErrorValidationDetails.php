@@ -4,14 +4,11 @@ namespace App\Model;
 
 class ErrorValidationDetails
 {
-    private array $violation = [];
+    private array $violations = [];
 
-    /**
-     * @var ErrorValidationDetailsItem[]
-     */
-    public function addViolation(string $fields, string $message): void
+    public function addViolation(string $field, string $message): void
     {
-        $this->violation[] = new ErrorValidationDetailsItem($fields, $message);
+        $this->violations[] = new ErrorValidationDetailsItem($field, $message);
     }
 
     /**
@@ -19,6 +16,6 @@ class ErrorValidationDetails
      */
     public function getViolation(): array
     {
-        return $this->violation;
+        return $this->violations;
     }
 }

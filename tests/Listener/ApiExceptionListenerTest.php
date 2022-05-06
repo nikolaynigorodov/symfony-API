@@ -194,36 +194,8 @@ class ApiExceptionListenerTest extends AbstractTestCase
         $this->assertResponse(Response::HTTP_NOT_FOUND, $responseBody, $event->getResponse());
     }
 
-
-    private function assertResponse(int $expectedStatusCode, string $expectedBody, Response $actualResponse): void
-    {
-        $this->assertEquals($expectedStatusCode, $actualResponse->getStatusCode());
-        $this->assertInstanceOf(JsonResponse::class, $actualResponse);
-        $this->assertJsonStringEqualsJsonString($expectedBody, json_decode($actualResponse->getContent()));
-    }
-
     private function runListener(ExceptionEvent $event, bool $isDebug = false): void
     {
         (new ApiExceptionListener($this->resolver, $this->logger, $this->serializer, $isDebug))($event);
-    }
-
-    private function createEvent(InvalidArgumentException $e): ExceptionEvent
-    {
-        return new ExceptionEvent(
-            $this->createTestKernel(),
-            new Request(),
-            HttpKernelInterface::MAIN_REQUEST,
-            $e
-        );
-    }
-
-    private function createTestKernel(): HttpKernelInterface
-    {
-        return new class() implements HttpKernelInterface {
-            public function handle(Request $request, int $type = self::MAIN_REQUEST, bool $catch = true)
-            {
-                return new Response('test');
-            }
-        };
     }
 }
